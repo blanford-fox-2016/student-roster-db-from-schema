@@ -3,14 +3,14 @@
 const repl = require('repl');
 const sqlite = require('sqlite3').verbose();
 
-let file = 'students.db';
+let file = 'student.db';
 let db = new sqlite.Database(file);
 
 
 // SQL Statement
-let CREATE_TABLE = "CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT NOT NULL, lastname TEXT, birthdate DATE);";
+let CREATE_TABLE = "CREATE TABLE IF NOT EXISTS student (id INTEGER PRIMARY KEY AUTOINCREMENT, firstname TEXT NOT NULL, lastname TEXT, birthdate DATE, sex TEXT);";
 
-let SEED_DATA = "INSERT INTO students (firstname, lastname, birthdate) VALUES ('Rubi', 'Henjaya', '1986-11-20'), ('Riza', 'Fahmi', '1983-12-31');";
+let SEED_DATA = "INSERT INTO student (firstname, lastname, birthdate, sex) VALUES ('Rubi', 'Henjaya', '20-11-1986', 'Male'), ('Riza', 'Fahmi', '31-12-1983', 'Male');";
 //write your code here
 
 let createTable = () => {
