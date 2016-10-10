@@ -47,29 +47,69 @@ class Student{
   }
 
   browse_name(name){
-    let BROWSE_NAME = db.prepare(`SELECT * FROM student WHERE firstname LIKE ? or lastname LIKE ?;`);
-    BROWSE_NAME.run(name, name, (err, row) => {
-      if (err){
+    let BROWSE_NAME = `SELECT * FROM student WHERE firstname like '%${name}%' or lastname like '%${name}%'`;
+    db.each(BROWSE_NAME, (err, row) => {
+      if (err) {
         console.log(err);
       } else {
-        console.log(`Data ${name} found!`);
         console.log(`${row.id} | ${row.firstname} ${row.lastname} | ${row.birthdate}`);
       }
     });
   }
-  browse_atr(){
-
+  browse_atr(atr, val){
+    let BROWSE_ANYTHING = `SELECT * FROM student WHERE ${atr} = '${val}'`
+    db.each(BROWSE_ANYTHING, (err, row) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${row.id} | ${row.firstname} ${row.lastname} | ${row.birthdate}`);
+      }
+    });
   }
-  browse_birthmonth(){
 
+  browse_birthmonth(){
+    let BROWSE_BIRTHMONTH = `SELECT * FROM student WHERE strftime('%m', birthdate) = strftime('%m', 'now')`;
+    db.each(BROWSE_BIRTHMONTH, (err, row) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${row.id} | ${row.firstname} ${row.lastname} | ${row.birthdate}`);
+      }
+    });
   }
   browse_birthday_sort(){
-
+    let BIRTHDATE_SORT = `SELECT * FROM student ORDER BY strftime('%Y, %m, %d', birthdate);`;
+    db.each(BIRTHDATE_SORT, (err, row) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${row.id} | ${row.firstname} ${row.lastname} | ${row.birthdate}`);
+      }
+    });
   }
 }
 var stud = new Student();
 
-// stud.read()
-stud.browse_name("budi")
-// stud.delete(6)
-// stud.add("budi", "utomo", "1908-05-20")
+let driver = () => {
+  db.serialize(function() {
+    // console.log("*** Daftar students pertama ***");
+    stud.read();
+    stud.add("Naruto", "Uzumaki", "1999-10-10");
+    stud.add("Budi", "Utomo", "1908-05-20");
+    // console.log("*** Daftar students setelah ada penambahan ***");
+    stud.read();
+    // console.log("*** Pencarian student dengan nama akhir utomo ***");
+    stud.browse_name("utomo");
+    // console.log("*** Student yg berulang tahun bulan ini ***");
+    stud.browse_birthmonth();
+    // console.log("*** Pencarian Student dengan atribut birthdate pada 1999-10-10 ***");
+    stud.browse_atr("birthdate", "1999-10-10");
+    // console.log("*** Hapus student id 4 (Pembubaran budi utomo) ***");
+    stud.delete(4);
+    // console.log("*** Daftar student urut dari yang tertua, setelah budi utomo dibubarkan ***");
+    stud.browse_birthday_sort();
+  });
+}
+
+
+driver()
