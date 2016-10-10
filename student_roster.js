@@ -115,5 +115,5 @@ let student = new Student
 // student.del(3)
 // student.listBirthday()
 // student.list()
-// student.listThisMonth
+// student.listThisMonth()
 // student.search(firstname, "alessandro")
