@@ -18,7 +18,7 @@ class Student{
         if(err){
           console.log(err);
         } else{
-          console.log('ADD_DATA');
+          console.log('Success!');
        }
      });
    });
@@ -30,7 +30,7 @@ class Student{
         if(err){
           console.log(err);
         } else{
-          console.log('DELETE_DATA');
+          console.log('Success!');
         }
       })
     })
@@ -56,10 +56,10 @@ class Student{
           console.log(err);
         }else{
           for(var i = 0; i < data.length; i++){
-            console.log("id: "+data[i].id);
+            console.log("------\nid: "+data[i].id);
             console.log("First name: "+data[i].firstname);
             console.log("Last name: " +data[i].lastname);
-            console.log("Birthday: " +data[i].birthdate);
+            console.log("Birthday: " +data[i].birthdate + "\n");
           }
         }
       })
@@ -116,4 +116,36 @@ let student = new Student
 // student.listBirthday()
 // student.list()
 // student.listThisMonth()
-// student.search(firstname, "alessandro")
+// student.search("firstname", "alessandro")
+function drive(str){
+  var keyword = str.toLowerCase().split(' ').splice(0,1).toString()
+  var array = str.split(' ')
+  array.splice(0,1)
+  console.log(keyword);
+  switch(keyword.trim()){
+    case "add":
+      student.add(array[0].trim(), array[1].trim(), array[2].trim())
+      break;
+    case "del":
+      student.del(array[0].trim())
+      break;
+    case "list":
+      student.list()
+      break;
+    case "search":
+      student.search(array[0].trim(), array[1].trim())
+      break;
+    case "listthismonth":
+      student.listThisMonth()
+      break;
+    case "listbirthday":
+      student.listBirthday(array[0].trim())
+      break;
+    case "exit":
+      process.exit()
+    default:
+      process.exit()
+  }
+
+}
+var r = repl.start({prompt: 'Hi, what would you like to do today?\n\n-add firstname, lastname, birthdate (yyyy-mm-dd)\n-del id (Delete student)\n-list\n-search column value\n-listthismonth (Birthdays this month)\n-listbirthday asc/desc (sort all birthdays)\n-exit\n', eval: drive})
