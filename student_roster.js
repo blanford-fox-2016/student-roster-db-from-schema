@@ -78,7 +78,7 @@ class Student {
     })
   }
 
-  searchByBirthMonth() {
+  viewByBirthMonth() {
     var SEARCH_DATA = `SELECT * FROM student
     WHERE strftime('%m', birthdate) = strftime('%m', 'now')`;
     db.each(SEARCH_DATA,function(err,row){
@@ -90,7 +90,7 @@ class Student {
     })
   }
 
-  searchByBirthday() {
+  viewByBirthday() {
     var SEARCH_DATA = `SELECT *, strftime('%w', birthdate) as hari FROM student ORDER BY hari;`
     db.each(SEARCH_DATA,function(err,row){
       if(err){
@@ -104,15 +104,79 @@ class Student {
 }
 
 var student = new Student()
-// student.deleteStudent(5)
-// student.viewStudent()
+
 // student.searchByFirstName("m")
 // student.searchByLastName("w")
 // student.searchByBirthdate("1945")
-// student.searchByBirthMonth()
-student.searchByBirthday()
+// student.viewByBirthMonth()
+// student.viewByBirthday()
 
 // student.addStudent("Mangku", "Widodo","1945-08-17")
 // student.addStudent("Dharmadi", "Tanamas","1993-10-01")
 // student.addStudent("Orang", "Satu","1993-10-10")
 // student.addStudent("Orang", "Dua","1993-10-03")
+
+
+var replServer = repl.start({prompt: '> '});
+replServer.defineCommand('address', {
+  help: 'address view\n        '+
+  'address add <firstname> <lastname> <birthdate>\n        '+
+  'address delete <id>\n        '+
+  'address searchByFirstName <firstname>\n        '+
+  'address searchByLastName <lastname>\n        '+
+  'address searchByBirthdate <birthdate>\n        '+
+  'address viewByBirthMonth\n        '+
+  'address viewByBirthday\n        ',
+  action: function(option) {
+    this.lineParser.reset();
+    this.bufferedCommand = '';
+    var temp = option.split(" ")
+    switch (temp[0]) {
+
+      case 'add':
+        student.addStudent(temp[1], temp[2],temp[3])
+        break;
+
+      case 'view':
+        student.viewStudent()
+        break;
+
+      case 'delete':
+        student.deleteStudent(temp[1])
+        break;
+
+      case 'searchByFirstName':
+        student.searchByFirstName(temp[1])
+        break;
+
+      case 'searchByLastName':
+        student.searchByLastName(temp[1])
+        break;
+
+      case 'searchByBirthdate':
+        student.searchByBirthdate(temp[1])
+        break;
+
+      case 'viewByBirthMonth':
+        student.viewByBirthMonth()
+        break;
+
+      case 'viewByBirthday':
+        student.viewByBirthday()
+        break;
+
+
+      default:
+        console.log("tidak ada");
+        break
+    }
+
+    this.displayPrompt();
+  }
+}
+
+);
+replServer.defineCommand('saybye', function() {
+  console.log('Goodbye!');
+  this.close();
+});
