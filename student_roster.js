@@ -90,26 +90,11 @@ class Student{
 }
 var stud = new Student();
 
-let driver = () => {
-  db.serialize(function() {
-    // console.log("*** Daftar students pertama ***");
-    stud.read();
-    stud.add("Naruto", "Uzumaki", "1999-10-10");
-    stud.add("Budi", "Utomo", "1908-05-20");
-    // console.log("*** Daftar students setelah ada penambahan ***");
-    stud.read();
-    // console.log("*** Pencarian student dengan nama akhir utomo ***");
-    stud.browse_name("utomo");
-    // console.log("*** Student yg berulang tahun bulan ini ***");
-    stud.browse_birthmonth();
-    // console.log("*** Pencarian Student dengan atribut birthdate pada 1999-10-10 ***");
-    stud.browse_atr("birthdate", "1999-10-10");
-    // console.log("*** Hapus student id 4 (Pembubaran budi utomo) ***");
-    stud.delete(4);
-    // console.log("*** Daftar student urut dari yang tertua, setelah budi utomo dibubarkan ***");
-    stud.browse_birthday_sort();
-  });
-}
 
-
-driver()
+var r = repl.start({prompt: '>'});
+r.context.viewAllStudents = stud.read
+r.context.searchByName = stud.browse_name
+r.context.sortFromOldest = stud.browse_birthday_sort
+r.context.whosBornThisMonth = stud.browse_birthmonth
+r.context.addNewStudent = stud.add
+r.context.deleteStudent = stud.delete
