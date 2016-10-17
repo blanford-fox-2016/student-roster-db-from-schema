@@ -59,17 +59,45 @@ class Student{
     }
 
 }
-
-
 var lol = new Student()
-// lol.addNewStudent('toni', 'stark', '1923-01-12')
-// lol.addNewStudent('jojo', 'jije', '1970-10-12')
-// lol.addNewStudent('lol', 'lala', '1960-09-12')
-lol.addNewStudent('obladi','oblada','1905-06-06')
-// lol.bdayStudentThisMonth(10)
-// lol.seeAllStudent()
+//adding new student
+let addnew = (namadepan,namabelakang,jumlah) => {
+    lol.addNewStudent(namadepan,namabelakang,jumlah)
+}
+//view all student
+let seeStudent = () => {
+  lol.seeAllStudent()
+}
+//biarthday student by month
+let birthdayMo = (month) => {
+  let input = month.toString()
+  lol.bdayStudentThisMonth(input)
+}
+//sortingby birthdate
+let sortBirth = () => {
+  lol.sortingBybirthdate()
+}
+//delete student by id
+let deleteStudent = (id) => {
+  lol.deleteStudentByid(id)
+}
+console.log('*input selalu menggunakan string\nberikut merupakan perintah yang bisa dijalankan:');
+console.log('1. addnew("namadepan","namabelakang","birthdate")->untuk memasukkan data student');
+console.log('2. seeStudent()->untuk melihat semua data murid');
+console.log('3. birthdayMo("inputangkabulan")->melihat yang lahir pada bulan yang dimasukkan berupa angka misal "06" ');
+console.log('4.sortBirth()->sorting berdasarkan tanggal lahir');
+console.log('5.deleteStudent("id")-->delete berdasarkan id');
+console.log("ingat untuk selalu menggunakan petik ('') untuk setiap data yang dimasukkan ");
+var r = repl.start({prompt: 'isi perintah >\n'});
+r.context.addnew = addnew
+r.context.seeStudent = seeStudent
+r.context.birthdayMo = birthdayMo
+r.context.deleteStudent = deleteStudent
+r.context.sortBirth = sortBirth
+
+// // lol.seeAllStudent()
+// //
+// //
+// //
+// // lol.seeAllStudent()
 //
-// lol.deleteStudentByid(1)
-//
-// lol.seeAllStudent()
-lol.sortingBybirthdate()
