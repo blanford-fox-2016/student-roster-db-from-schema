@@ -54,7 +54,7 @@ class Student{
 //sorting by birthdate
     sortingBybirthdate(){
       db.each(`SELECT * FROM student  order by birthdate;`, function(err, row) {
-      console.log(row.id + ": " + row.firstname + " "+ row.lastname + " " + row.birthdate);
+      console.log(row.id + ": " + row.firstname + " "+row.age+ " "+ row.lastname + " " + row.birthdate);
         });
     }
 
