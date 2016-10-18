@@ -26,12 +26,12 @@ static display_student()
 
 static display_student_by_name(firstname,lastname)
 {
-  var DISPLAY_STUDENT_BY_NAME = `select * from student where firstname like ${'%firstname%'} and lastname like ${'lastname'} group by firstname`
+  var DISPLAY_STUDENT_BY_NAME = `select * from student where firstname like '%${firstname}%' and lastname like '%${lastname}%' group by firstname`
   Student.display_executed_command(DISPLAY_STUDENT_BY_NAME)
 }
 
 static display_student_by_atribute(firstname){
-  var DISPLAY_STUDENT_BY_ATRIBUTE = `select * from student where firstname = ${firstname}`
+  var DISPLAY_STUDENT_BY_ATRIBUTE = `select * from student where firstname = '${firstname}'`
   Student.display_executed_command(DISPLAY_STUDENT_BY_ATRIBUTE)
 }
 
@@ -66,11 +66,54 @@ static display_student_by_birthdate()
     db.serialize(function(){
       db.all(result,function(err,data){
         if(err)console.log(err);
-        else {console.log(data);}
+        else {
+          for(var i=0;i<data.length;i++){
+            console.log(data[i]);
+          }
+        }
       })
     })
   }
 }
 
-Student.add_student('toni','chen','1998-23-45')
-Student.display_student()
+var replServer = repl.start({prompt: '> '});
+replServer.defineCommand('command', {
+  help: '\n\n============= Students ==============\n\naddStudent(firstname,lastname,birthdate)\nlistStudent\ndisplayStudentByName (firstname,lastname)\ndestroyStudent(studentID)\ndisplayStudentByAttribute (firstname)\ndisplayStudentCurrentBirthdate\ndisplayStudentByBirthdate\n\n',
+
+  action: function(name) {
+var splitName = name.split(' ')
+    switch (splitName[0]) {
+      case 'addStudent':
+      Student.add_student(splitName[1],splitName[2],splitName[3])
+      break;
+      case 'listStudent':
+      Student.display_student()
+      break;
+      case 'displayStudentByName':
+      Student.display_student_by_name(splitName[1],splitName[2])
+      break;
+      case 'destroyStudent':
+      Student.delete_student(splitName[1])
+      break;
+      case 'displayStudentByAttribute':
+      Student.display_student_by_atribute(splitName[1])
+      break;
+      case 'displayStudentCurrentBirthdate':
+      Student.display_student_current_birthdate()
+      break;
+      case 'displayStudentByBirthdate':
+      Student.display_student_by_birthdate()
+      break;
+
+      default:
+      console.log('error');
+      break;
+    }
+    this.displayPrompt();
+  }
+});
+
+replServer.defineCommand('Exit', function() {
+  console.log('Goodbye!');
+  this.close();
+});
